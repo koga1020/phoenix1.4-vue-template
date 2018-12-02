@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+    postgres:
+        build: ./postgres
+        volumes:
+            - ${DATA_PATH_HOST}/postgres:/var/lib/postgresql/data
+        ports:
+            - "${POSTGRES_PORT}:5432"
+        environment:
+            - POSTGRES_DB=${POSTGRES_DB}
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        networks:
+            - backend
+    phoenix:
+        build: ./phoenix
+        tty: true
+        volumes:
+            - ${APP_CODE_PATH_HOST}:/app
+        ports:
+            - "${PHOENIX_PORT}:4000"
+        networks:
+            - backend
+
+
+
